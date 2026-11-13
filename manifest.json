@@ -9,3 +9,14 @@
   "start_url": "/",
   "theme_color": "#ffffff"
 }
+{
+  "background_color": "#ffffff",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "Instant High",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "Instant High",
+  "start_url": "/",
+  "theme_color": "#ffffff"
+}
