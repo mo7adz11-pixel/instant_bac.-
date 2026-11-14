@@ -1,0 +1,27 @@
+{
+  "name": "Instant High - رفيق البكالوريا",
+  "short_name": "Instant High",
+  "description": "تطبيق تعليمي متكامل لطلبة البكالوريا في الجزائر: مؤقت دراسة، بطاقات مراجعة، تحديات سريعة، ومساعد الذكاء الاصطناعي نور.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f172a",
+  "theme_color": "#4f46e5",
+  "dir": "rtl",
+  "lang": "ar",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

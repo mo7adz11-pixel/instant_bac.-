@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#4f46e5" />
+  <meta name="description" content="Instant High - تطبيق المراجعة الذكية لطلبة البكالوريا في الجزائر" />
+  <title>Instant High | رفيق البكالوريا</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+  <link rel="apple-touch-icon" href="icon-512.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-light: #6366f1;
+      --accent: #f59e0b;
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --border: #334155;
+      --success: #10b981;
+      --danger: #ef4444;
+    }
+    body.theme-emerald { --primary: #059669; --primary-light: #10b981; }
+    body.theme-rose { --primary: #e11d48; --primary-light: #f43f5e; }
+    body.theme-amber { --primary: #d97706; --primary-light: #f59e0b; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 85px; transition: 0.3s; }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), #1e1b4b);
+      padding: 18px 16px;
+      border-bottom-left-radius: 24px;
+      border-bottom-right-radius: 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand-logo {
+      width: 42px; height: 42px; border-radius: 12px; background: #fff; color: var(--primary);
+      display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px;
+    }
+    .brand h1 { font-size: 18px; font-weight: 800; }
+    .brand span { font-size: 11px; color: #cbd5e1; display: block; }
+    .points-badge {
+      background: rgba(255,255,255,0.15); padding: 6px 12px; border-radius: 20px;
+      font-weight: 700; font-size: 13px; display: flex; align-items: center; gap: 5px;
+    }
+
+    .container { padding: 16px; max-width: 600px; margin: 0 auto; }
+    .section { display: none; animation: fadeIn 0.25s ease; }
+    .section.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 18px;
+      padding: 16px; margin-bottom: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .card-title { font-size: 16px; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
+
+    .streams-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .stream-btn {
+      background: #0f172a; border: 1px solid var(--border); color: var(--text);
+      padding: 10px; border-radius: 12px; font-size: 12px; font-weight: 600; cursor: pointer; text-align: center;
+    }
+    .stream-btn.selected { background: var(--primary); border-color: var(--primary-light); color: #fff; }
+
+    .themes-row { display: flex; gap: 10px; margin-top: 8px; }
+    .theme-dot { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid #fff; }
+
+    .timer-display { font-size: 46px; font-weight: 800; text-align: center; letter-spacing: 2px; margin: 12px 0; color: #fff; }
+    .btn-row { display: flex; gap: 10px; justify-content: center; }
+    .btn {
+      background: var(--primary); color: #fff; border: none; padding: 10px 18px;
+      border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; flex: 1; text-align: center;
+    }
+    .btn-secondary { background: #334155; }
+    .btn-danger { background: var(--danger); }
+    .btn-success { background: var(--success); }
+
+    .flashcard {
+      background: linear-gradient(145deg, #1e293b, #0f172a); border: 2px solid var(--primary);
+      border-radius: 16px; padding: 24px 16px; text-align: center; min-height: 150px;
+      display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer;
+    }
+    .flashcard-tag { font-size: 11px; color: var(--accent); margin-bottom: 8px; font-weight: 700; }
+    .flashcard-text { font-size: 16px; font-weight: 700; line-height: 1.6; }
+
+    .quiz-timer-bar { height: 8px; background: #334155; border-radius: 8px; overflow: hidden; margin-bottom: 12px; }
+    .quiz-timer-fill { height: 100%; background: var(--accent); width: 100%; transition: width 1s linear; }
+    .option-btn {
+      width: 100%; text-align: right; background: #0f172a; border: 1px solid var(--border);
+      color: var(--text); padding: 12px; border-radius: 12px; margin-bottom: 8px; font-size: 14px; cursor: pointer;
+    }
+    .option-btn.correct { background: var(--success); border-color: var(--success); }
+    .option-btn.wrong { background: var(--danger); border-color: var(--danger); }
+
+    .chat-box { height: 260px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding: 8px; background: #0f172a; border-radius: 12px; margin-bottom: 10px; }
+    .msg { padding: 10px 14px; border-radius: 14px; font-size: 13px; max-width: 85%; line-height: 1.5; }
+    .msg.nour { background: var(--primary); align-self: flex-start; border-bottom-right-radius: 4px; }
+    .msg.user { background: #334155; align-self: flex-end; border-bottom-left-radius: 4px; }
+    .chat-input-row { display: flex; gap: 8px; }
+    .chat-input { flex: 1; background: #0f172a; border: 1px solid var(--border); color: #fff; padding: 10px 12px; border-radius: 12px; font-size: 13px; }
+
+    .rank-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid var(--border); }
+    .rank-item:last-child { border-bottom: none; }
+    .pro-badge { background: linear-gradient(45deg, #f59e0b, #fbbf24); color: #000; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 10px; }
+
+    nav {
+      position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; border-top: 1px solid var(--border);
+      display: flex; justify-content: space-around; padding: 8px 4px; z-index: 100;
+    }
+    .nav-item {
+      background: none; border: none; color: var(--muted); font-size: 11px; font-weight: 700;
+      display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; flex: 1;
+    }
+    .nav-item.active { color: var(--primary-light); }
+    .nav-icon { font-size: 18px; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <div class="brand-logo">IH</div>
+      <div>
+        <h1>Instant High</h1>
+        <span id="current-stream-label">شعبة علوم تجريبية</span>
+      </div>
+    </div>
+    <div class="points-badge">⭐ <span id="user-xp">120</span> XP</div>
+  </header>
+
+  <div class="container">
+
+    <div id="sec-home" class="section active">
+      <div class="card">
+        <div class="card-title"><span>⏱️ مؤقت التركيز (بومودورو الباك)</span></div>
+        <div class="timer-display" id="timer">25:00</div>
+        <div class="btn-row">
+          <button class="btn" onclick="startTimer()">ابدأ الجلسة</button>
+          <button class="btn btn-secondary" onclick="pauseTimer()">إيقاف</button>
+          <button class="btn btn-danger" onclick="resetTimer()">إعادة</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span>🎓 اختر شعبتك الدراسية</span></div>
+        <div class="streams-grid" id="streams-list">
+          <button class="stream-btn selected" onclick="selectStream(this, 'علوم تجريبية')">علوم تجريبية</button>
+          <button class="stream-btn" onclick="selectStream(this, 'رياضيات')">رياضيات</button>
+          <button class="stream-btn" onclick="selectStream(this, 'تقني رياضي')">تقني رياضي</button>
+          <button class="stream-btn" onclick="selectStream(this, 'تسيير واقتصاد')">تسيير واقتصاد</button>
+          <button class="stream-btn" onclick="selectStream(this, 'آداب وفلسفة')">آداب وفلسفة</button>
+          <button class="stream-btn" onclick="selectStream(this, 'لغات أجنبية')">لغات أجنبية</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span>🎨 مظهر التطبيق</span></div>
+        <div class="themes-row">
+          <div class="theme-dot" style="background:#4f46e5" onclick="setTheme('')"></div>
+          <div class="theme-dot" style="background:#059669" onclick="setTheme('theme-emerald')"></div>
+          <div class="theme-dot" style="background:#e11d48" onclick="setTheme('theme-rose')"></div>
+          <div class="theme-dot" style="background:#d97706" onclick="setTheme('theme-amber')"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="sec-cards" class="section">
+      <div class="card">
+        <div class="card-title"><span>🗂️ بطاقات المراجعة السريعة</span><span id="card-counter">1 / 4</span></div>
+        <div class="flashcard" onclick="flipCard()">
+          <div class="flashcard-tag" id="card-subject">تاريخ وجغرافيا</div>
+          <div class="flashcard-text" id="card-content">اضغط لعرض السؤال</div>
+        </div>
+        <div class="btn-row" style="margin-top:12px;">
+          <button class="btn btn-secondary" onclick="prevCard()">السابق</button>
+          <button class="btn" onclick="nextCard()">التالي (+5 XP)</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="sec-quiz" class="section">
+      <div class="card">
+        <div class="card-title">
+          <span>⚡ تحدي الـ 20 ثانية</span>
+          <span id="quiz-sec" style="color:var(--accent);font-weight:800;">20s</span>
+        </div>
+        <div class="quiz-timer-bar"><div class="quiz-timer-fill" id="quiz-bar"></div></div>
+        <p id="quiz-question" style="font-weight:700;margin-bottom:14px;line-height:1.6;">اضغط ابدأ لخوض التحدي السريع وكسب النقاط!</p>
+        <div id="quiz-options"></div>
+        <div class="btn-row" style="margin-top:10px;">
+          <button class="btn btn-success" id="start-quiz-btn" onclick="startQuiz()">ابدأ التحدي</button>
+          <button class="btn btn-danger" id="forfeit-btn" style="display:none;" onclick="forfeitQuiz()">انسحاب (-10 XP)</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="sec-nour" class="section">
+      <div class="card">
+        <div class="card-title"><span>🤖 نور - رفيقك الذكي للبكالوريا</span></div>
+        <div class="chat-box" id="chat-box">
+          <div class="msg nour">أهلاً بك يا بطل الباك! أنا <b>نور</b>. اسألني عن طريقة تنظيم الوقت، ملخصات التاريخ، أو نصائح التفوق!</div>
+        </div>
+        <div class="chat-input-row">
+          <input type="text" id="chat-input" class="chat-input" placeholder="اكتب سؤالك لنور هنا..." />
+          <button class="btn" style="flex:0 0 auto;" onclick="sendToNour()">إرسال</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="sec-rank" class="section">
+      <div class="card">
+        <div class="card-title"><span>🏆 لوحة المتصدرين (مكافآت Pro)</span></div>
+        <div class="rank-item"><span>🥇 1. أمين (علوم تجريبية)</span><span>1450 XP <span class="pro-badge">PRO</span></span></div>
+        <div class="rank-item"><span>🥈 2. سارة (رياضيات)</span><span>1320 XP <span class="pro-badge">PRO</span></span></div>
+        <div class="rank-item"><span>🥉 3. ياسين (تقني رياضي)</span><span>1190 XP <span class="pro-badge">PRO</span></span></div>
+        <div class="rank-item" style="background:rgba(79,70,229,0.2);border-radius:10px;margin-top:6px;">
+          <span>👤 أنت (حسابك)</span><span id="rank-user-xp">120 XP</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <nav>
+    <button class="nav-item active" onclick="switchTab('sec-home', this)"><span class="nav-icon">🏠</span>الرئيسية</button>
+    <button class="nav-item" onclick="switchTab('sec-cards', this)"><span class="nav-icon">🗂️</span>البطاقات</button>
+    <button class="nav-item" onclick="switchTab('sec-quiz', this)"><span class="nav-icon">⚡</span>التحدي</button>
+    <button class="nav-item" onclick="switchTab('sec-nour', this)"><span class="nav-icon">🤖</span>نور AI</button>
+    <button class="nav-item" onclick="switchTab('sec-rank', this)"><span class="nav-icon">🏆</span>الترتيب</button>
+  </nav>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
+
+    let xp = parseInt(localStorage.getItem('ih_xp') || '120');
+    function updateXP(delta) {
+      xp = Math.max(0, xp + delta);
+      localStorage.setItem('ih_xp', xp);
+      document.getElementById('user-xp').textContent = xp;
+      document.getElementById('rank-user-xp').textContent = xp + ' XP';
+    }
+    updateXP(0);
+
+    function switchTab(id, el) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      el.classList.add('active');
+    }
+
+    function selectStream(btn, name) {
+      document.querySelectorAll('.stream-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      document.getElementById('current-stream-label').textContent = 'شعبة ' + name;
+    }
+
+    function setTheme(cls) {
+      document.body.className = cls;
+    }
+
+    let timeLeft = 25 * 60, timerInt = null;
+    function renderTimer() {
+      const m = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+      const s = String(timeLeft % 60).padStart(2, '0');
+      document.getElementById('timer').textContent = `${m}:${s}`;
+    }
+    function startTimer() {
+      if (timerInt) return;
+      timerInt = setInterval(() => {
+        if (timeLeft > 0) { timeLeft--; renderTimer(); }
+        else { clearInterval(timerInt); timerInt = null; updateXP(50); alert('أحسنت! أتممت جلسة التركيز +50 XP'); }
+      }, 1000);
+    }
+    function pauseTimer() { clearInterval(timerInt); timerInt = null; }
+    function resetTimer() { pauseTimer(); timeLeft = 25 * 60; renderTimer(); }
+
+    const cards = [
+      { sub: 'تاريخ', q: 'متى تأسست حركة عدم الانحياز؟', a: 'في مؤتمر بلغراد من 1 إلى 6 سبتمبر 1961.' },
+      { sub: 'فلسفة', q: 'من هو مؤسس المذهب التجريبي الحديث؟', a: 'فرانسيس بيكون وجون لوك.' },
+      { sub: 'علوم طبيعية', q: 'أين يتم تركيب البروتين في الخلية؟', a: 'على مستوى الشبكة الهيولية المحببة (الريبوزومات).' },
+      { sub: 'رياضيات', q: 'ما هي مشتقة الدالة ln(x)؟', a: '1 / x على المجال ]0 , +∞[' }
+    ];
+    let cardIdx = 0, flipped = false;
+    function showCard() {
+      document.getElementById('card-counter').textContent = `${cardIdx + 1} / ${cards.length}`;
+      document.getElementById('card-subject').textContent = cards[cardIdx].sub;
+      document.getElementById('card-content').textContent = flipped ? cards[cardIdx].a : cards[cardIdx].q;
+    }
+    function flipCard() { flipped = !flipped; showCard(); }
+    function nextCard() { cardIdx = (cardIdx + 1) % cards.length; flipped = false; showCard(); updateXP(5); }
+    function prevCard() { cardIdx = (cardIdx - 1 + cards.length) % cards.length; flipped = false; showCard(); }
+    showCard();
+
+    const quizzes = [
+      { q: 'تاريخ اندلاع الثورة التحريرية الجزائرية هو:', opts: ['1 نوفمبر 1954', '5 جويلية 1962', '20 أوت 1955'], ans: 0 },
+      { q: 'وحدة قياس التوتر الكهربائي هي:', opts: ['الأمبير', 'الفولط', 'الأوم'], ans: 1 },
+      { q: 'عاصمة الولاية التاريخية الأولى (الأوراس) كانت بقيادة:', opts: ['مصطفى بن بولعيد', 'العربي بن مهيدي', 'ديدوش مراد'], ans: 0 }
+    ];
+    let qIdx = 0, qSec = 20, qTimer = null;
+    function startQuiz() {
+      document.getElementById('start-quiz-btn').style.display = 'none';
+      document.getElementById('forfeit-btn').style.display = 'block';
+      qSec = 20;
+      const item = quizzes[qIdx % quizzes.length];
+      document.getElementById('quiz-question').textContent = item.q;
+      const box = document.getElementById('quiz-options');
+      box.innerHTML = '';
+      item.opts.forEach((o, i) => {
+        const b = document.createElement('button');
+        b.className = 'option-btn';
+        b.textContent = o;
+        b.onclick = () => answerQuiz(i === item.ans, b);
+        box.appendChild(b);
+      });
+      clearInterval(qTimer);
+      document.getElementById('quiz-bar').style.width = '100%';
+      qTimer = setInterval(() => {
+        qSec--;
+        document.getElementById('quiz-sec').textContent = qSec + 's';
+        document.getElementById('quiz-bar').style.width = (qSec * 5) + '%';
+        if (qSec <= 0) { clearInterval(qTimer); finishQuiz('انتهى الوقت!'); }
+      }, 1000);
+    }
+    function answerQuiz(ok, btn) {
+      clearInterval(qTimer);
+      if (ok) { btn.classList.add('correct'); updateXP(20); finishQuiz('إجابة صحيحة! +20 XP'); }
+      else { btn.classList.add('wrong'); finishQuiz('إجابة خاطئة! حاول مجدداً'); }
+    }
+    function forfeitQuiz() {
+      clearInterval(qTimer);
+      updateXP(-10);
+      finishQuiz('تم الانسحاب من التحدي (-10 XP)');
+    }
+    function finishQuiz(msg) {
+      qIdx++;
+      document.getElementById('quiz-question').textContent = msg;
+      document.getElementById('start-quiz-btn').style.display = 'block';
+      document.getElementById('forfeit-btn').style.display = 'none';
+    }
+
+    function sendToNour() {
+      const inp = document.getElementById('chat-input');
+      const txt = inp.value.trim();
+      if (!txt) return;
+      const box = document.getElementById('chat-box');
+      box.innerHTML += `<div class="msg user">${txt}</div>`;
+      inp.value = '';
+      let reply = 'نصيحتي لك: قسّم مراجعتك إلى جلسات 25 دقيقة مع حل حوليات البكالوريا السابقة بانتظام!';
+      if (txt.includes('تاريخ') || txt.includes('حفظ')) reply = 'لحفظ التاريخ بفعالية: اربط التواريخ بالأحداث الكبرى واستعمل بطاقات المراجعة في التطبيق يومياً.';
+      else if (txt.includes('وقت') || txt.includes('جدول')) reply = 'أفضل توقيت للحفظ هو بعد صلاة الفجر، وللتمارين العلمية في الفترة المسائية.';
+      else if (txt.includes('خوف') || txt.includes('توتر')) reply = 'البكالوريا امتحان عادي جداً، ثقتك بنفسك ومراجعتك المستمرة هما مفتاح النجاح!';
+      setTimeout(() => {
+        box.innerHTML += `<div class="msg nour">${reply}</div>`;
+        box.scrollTop = box.scrollHeight;
+      }, 400);
+    }
+  </script>
+</body>
+</html>
